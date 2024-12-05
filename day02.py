@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Iterable
 
 
 def read_data(input_path: str) -> Generator[tuple[int, ...]]:
@@ -23,9 +23,9 @@ def in_range(val: int) -> bool:
     return abs(val) in (1, 2, 3)
 
 
-def is_safe(report: tuple[int, ...]) -> bool:
+def is_safe(report: Iterable[int]) -> bool:
     """
-    Takes a tuple of integers representing a generator report and determine if it's safe
+    Takes an iterable of integers representing a generator report and determine if it's safe
     Safety is defined as:
     - The levels are either all increasing or all decreasing
     - All changes are 1, 2, or 3
@@ -41,13 +41,37 @@ def is_safe(report: tuple[int, ...]) -> bool:
     return False
 
 
-def main(input_path: str):
+def run_part1(input_path: str):
     num_safe = 0
     for report in read_data(input_path):
         if is_safe(report):
             num_safe += 1
 
     print("Number of safe reports:", num_safe)
+
+
+def run_part2(input_path: str):
+    num_safe = 0
+    for report in read_data(input_path):
+        if is_safe(report):
+            num_safe += 1
+            continue
+
+        # Remove one element at a time from report
+        # and check if the remainder is safe
+        for i in range(len(report)):
+            tmp_report = list(report)
+            tmp_report.pop(i)
+            if is_safe(tmp_report):
+                num_safe += 1
+                break
+
+    print("Number of safe reports with Problem Dampener:", num_safe)
+
+
+def main(input_path: str):
+    run_part1(input_path)
+    run_part2(input_path)
 
 
 if __name__ == "__main__":

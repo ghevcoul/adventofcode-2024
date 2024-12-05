@@ -1,5 +1,6 @@
 from collections import Counter
 
+
 def calculate_distance(list1: list[int], list2: list[int]) -> None:
     """
     Takes two lists and calculates the pairwise distance between them
@@ -27,7 +28,7 @@ def calculate_similarity(list1: list[int], list2: list[int]) -> None:
 def main(input_data: str):
     list1 = []
     list2 = []
-    with open(input_data, 'r') as fp:
+    with open(input_data, "r") as fp:
         for line in fp.readlines():
             val1, val2 = line.split()
             list1.append(int(val1))

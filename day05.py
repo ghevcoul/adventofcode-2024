@@ -36,7 +36,7 @@ class Rules:
         """
         return sorted(update, key=cmp_to_key(self.compare_pages))
 
-    def compare_pages(self, left: int, right: int) -> bool:
+    def compare_pages(self, left: int, right: int) -> int:
         """
         Compares two page numbers returning True if left should come before right (i.e. left < right)
         left < right if right exists in left's rules

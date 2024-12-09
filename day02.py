@@ -1,4 +1,4 @@
-from typing import Generator, Iterable
+from typing import Generator, Sequence
 
 
 def read_data(input_path: str) -> Generator[tuple[int, ...]]:
@@ -23,7 +23,7 @@ def in_range(val: int) -> bool:
     return abs(val) in (1, 2, 3)
 
 
-def is_safe(report: Iterable[int]) -> bool:
+def is_safe(report: Sequence[int]) -> bool:
     """
     Takes an iterable of integers representing a generator report and determine if it's safe
     Safety is defined as:

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import partial
 from itertools import product
 from operator import add, mul
 
@@ -20,12 +21,23 @@ def load_data(path: str) -> list[Equation]:
     return equations
 
 
-def is_valid_equation(equation: Equation) -> bool:
+def concatenate(a: int, b: int) -> int:
     """
-    Determine if this equation can be made valid by inserting either "+" or "*" between
-    the values
+    Takes two integers and concatenates their digits to create a new integer
+    e.g. concatenate(5, 6) -> 56, concatenate(17, 45) -> 1745
     """
-    for operator_perm in product([add, mul], repeat=len(equation.values) - 1):
+    return int(str(a) + str(b))
+
+
+def is_valid_equation(equation: Equation, with_concat: bool = False) -> bool:
+    """
+    Determine if this equation can be made valid by inserting addition, multiplication,
+    or concatenation operators between the values
+    """
+    operators = [add, mul]
+    if with_concat:
+        operators.append(concatenate)
+    for operator_perm in product(operators, repeat=len(equation.values) - 1):
         running_total = equation.values[0]
         for val, operator in zip(equation.values[1:], operator_perm):
             running_total = operator(running_total, val)
@@ -40,6 +52,11 @@ def main(path: str):
     valid_eqs = filter(is_valid_equation, equations)
     summed_results = sum(eq.result for eq in valid_eqs)
     print("Total calibration results:", summed_results)
+
+    valid_concat = partial(is_valid_equation, with_concat=True)
+    valid_eqs = filter(valid_concat, equations)
+    summed_results = sum(eq.result for eq in valid_eqs)
+    print("Total calibration results with concatenation:", summed_results)
 
 
 if __name__ == "__main__":

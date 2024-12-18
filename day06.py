@@ -1,21 +1,7 @@
-from dataclasses import dataclass
+from utils import BoundedGrid, XYCoord
 
 
-@dataclass(frozen=True)
-class XYCoord:
-    x: int
-    y: int
-
-    def __add__(self, other: "XYCoord") -> "XYCoord":
-        new_x = self.x + other.x
-        new_y = self.y + other.y
-        return XYCoord(new_x, new_y)
-
-    def __repr__(self) -> str:
-        return f"XYCoord({self.x},{self.y})"
-
-
-class LabMap:
+class LabMap(BoundedGrid):
     up = XYCoord(0, -1)
     right = XYCoord(1, 0)
     down = XYCoord(0, 1)
@@ -36,8 +22,8 @@ class LabMap:
                         obstacles.append(XYCoord(j, i))
                     elif char == "^":
                         self.guard = XYCoord(j, i)
-        self.max_x = j
-        self.max_y = i
+
+        super().__init__(j, i)
 
         self.obstacles = obstacles
 
@@ -51,20 +37,12 @@ class LabMap:
         """
         visited = set()
 
-        while self._within_bounds():
+        while self._within_bounds(self.guard):
             # print(self.guard, self.guard_facing)
             visited.add(self.guard)
             self._step_forward()
 
         return len(visited)
-
-    def _within_bounds(self) -> bool:
-        """
-        Checks whether the guard is currently within the bounds of the map
-        """
-        x_in = 0 <= self.guard.x <= self.max_x
-        y_in = 0 <= self.guard.y <= self.max_y
-        return x_in and y_in
 
     def _step_forward(self):
         """

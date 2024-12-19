@@ -11,8 +11,10 @@ class XYCoord:
         new_y = self.y + other.y
         return XYCoord(new_x, new_y)
 
-    def __repr__(self) -> str:
-        return f"XYCoord({self.x},{self.y})"
+    def __sub__(self, other: "XYCoord") -> "XYCoord":
+        new_x = self.x - other.x
+        new_y = self.y - other.y
+        return XYCoord(new_x, new_y)
 
 
 class BoundedGrid:
